@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adverse Impact Calculator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Professional screening</p>
+          <h1>Adverse Impact Calculator</h1>
+          <p class="subhead">
+            Upload an Excel or CSV file to compare selection rates across demographic groups and
+            generate a shareable report aligned to the 4/5ths rule.
+          </p>
+        </div>
+        <div class="hero-card">
+          <h2>Quick Start</h2>
+          <ol class="steps">
+            <li>Upload your hiring file</li>
+            <li>Explain your data</li>
+            <li>Review and export the report</li>
+          </ol>
+          <button id="download-sample" class="btn ghost">Download sample Excel</button>
+        </div>
+      </header>
+
+      <main class="grid">
+        <section class="panel wide-panel">
+          <h3>Step 1: Upload Data</h3>
+          <div class="upload">
+            <input id="csv-file" type="file" accept=".xlsx,.csv" />
+            <div class="upload-meta" id="upload-meta">
+              No file selected.
+            </div>
+          </div>
+          <div class="hint">Your Excel or CSV file should include headers in the first row.</div>
+        </section>
+
+        <section class="panel">
+          <h3>Step 2: Explain the Data</h3>
+          <div class="field">
+            <label for="decision-type">Decision format<span class="help" data-tip="Pass/Fail means the decision is already final. Percent means you want to set a cutoff score.">?</span></label>
+            <select id="decision-type" disabled>
+              <option value="binary">Pass/Fail decision</option>
+              <option value="score">Percent score (cutoff)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="test-name">Test name<span class="help" data-tip="This will appear on the exported report.">?</span></label>
+            <input id="test-name" type="text" placeholder="e.g., Hiring Assessment – Q1" disabled />
+          </div>
+          <div class="field">
+            <label for="gender-column">Demographic column<span class="help" data-tip="Choose the demographic column you want to compare (gender, race, age group, etc.).">?</span></label>
+            <select id="gender-column" disabled>
+              <option value="">Upload a file first</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="reference-group">Reference group<span class="help" data-tip="All other groups are compared to this group. If unsure, leave the default.">?</span></label>
+            <select id="reference-group" disabled>
+              <option value="">Use highest selection rate</option>
+            </select>
+            <div class="hint">
+              Leave as default if you are unsure.
+            </div>
+          </div>
+          <div class="field">
+            <label for="decision-column">Decision column<span class="help" data-tip="Choose the column that contains the decision outcome or the score.">?</span></label>
+            <select id="decision-column" disabled>
+              <option value="">Upload a file first</option>
+            </select>
+          </div>
+          <div class="field" id="selected-values-field">
+            <label>Selected outcomes<span class="help" data-tip="Check which outcomes indicate the person was selected (for example: Hired or Yes).">?</span></label>
+            <div id="selected-values-list" class="checkbox-list"></div>
+            <input id="selected-values-other" type="text" placeholder="Add additional values (comma-separated)" disabled />
+            <div class="hint">
+              Choose all values that count as selected.
+            </div>
+          </div>
+          <div class="field hidden" id="cut-score-field">
+            <label for="cut-score">Cutoff score<span class="help" data-tip="Anyone at or above the cutoff is treated as selected. You can enter multiple cutoffs.">?</span></label>
+            <input id="cut-score" type="text" placeholder="e.g. 75; 77.5; 80" disabled />
+            <div class="hint">
+              One results table will be generated per cutoff.
+            </div>
+            <div class="hint" id="cut-score-note"></div>
+          </div>
+          <button id="generate-options" class="btn ghost hidden" disabled>Suggest 5 cutoffs</button>
+          <button id="run-analysis" class="btn" disabled>Run analysis</button>
+        </section>
+
+        <section class="panel results-panel">
+          <h3>Step 3: Review the Results</h3>
+          <div class="explain">
+            This section compares selection rates by group and highlights potential disparities.
+          </div>
+          <div id="results-empty" class="empty">
+            Upload a file and run the analysis to view results.
+          </div>
+          <div id="results" class="results hidden">
+            <div class="summary" id="summary"></div>
+            <div id="results-content"></div>
+            <div class="actions">
+              <button id="download-report" class="btn">Download report (HTML)</button>
+              <button id="download-results" class="btn ghost">Download results Excel</button>
+              <button id="print-report" class="btn ghost">Print to PDF</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        Disclaimer: This tool provides an informational screening aligned with EEOC 4/5ths guidance.
+        It is not legal advice and should be reviewed by qualified counsel.
+      </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
