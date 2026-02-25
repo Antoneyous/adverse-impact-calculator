@@ -403,6 +403,15 @@ function applyReferenceGroup(groups, referenceLabel) {
   return referenceRate;
 }
 
+function sortGroups(groups) {
+  groups.sort((a, b) => {
+    if (a.isReference !== b.isReference) {
+      return a.isReference ? -1 : 1;
+    }
+    return b.total - a.total;
+  });
+}
+
 function buildResultsTableHtml(groups) {
   const rowsHtml = groups
     .map((group) => {
@@ -512,6 +521,7 @@ function analyze() {
         return Number.isFinite(score) && score >= cutScore;
       });
       const referenceRate = applyReferenceGroup(analysis.groups, referenceGroupSelect.value);
+      sortGroups(analysis.groups);
       const result = {
         fileName: state.fileName,
         testName,
@@ -544,11 +554,12 @@ function analyze() {
       selectedSet.has(decisionRaw.toLowerCase())
     );
     const referenceRate = applyReferenceGroup(analysis.groups, referenceGroupSelect.value);
-      const result = {
-        fileName: state.fileName,
-        testName,
-        rowsTotal: state.rows.length,
-        rowsUsed: analysis.rowsUsed,
+    sortGroups(analysis.groups);
+    const result = {
+      fileName: state.fileName,
+      testName,
+      rowsTotal: state.rows.length,
+      rowsUsed: analysis.rowsUsed,
       selectedValues,
       maxSelectionRate: analysis.maxSelectionRate,
       groups: analysis.groups,
